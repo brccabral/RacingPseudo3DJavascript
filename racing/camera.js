@@ -23,7 +23,11 @@ class Camera {
     }
 
     update() {
+        var player = this.scene.player;
+        var circuit = this.scene.circuit;
+
+        this.x = player.x * circuit.roadWidth;
         // place the camera behind the player
-        this.z = -this.distToPlayer;
+        this.z = player.z - this.distToPlayer;
     }
 }

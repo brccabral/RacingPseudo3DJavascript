@@ -42,6 +42,7 @@ class MainScene extends Phaser.Scene {
 
         // instances
         this.circuit = new Circuit(this);
+        this.player = new Player(this);
         this.camera = new Camera(this);
         this.settings = new Settings(this);
 
@@ -66,6 +67,7 @@ class MainScene extends Phaser.Scene {
             case STATE_INIT:
                 // console.log('Init game');
                 this.camera.init();
+                this.player.restart();
                 state = STATE_RESTART;
                 break;
 
@@ -77,6 +79,8 @@ class MainScene extends Phaser.Scene {
 
             case STATE_PLAY:
                 // console.log('Playing game');
+                var dt = Math.min(1, delta / 1000); // limit to 1 second
+                this.player.update(dt);
                 this.camera.update();
                 this.circuit.render3D();
                 break;
