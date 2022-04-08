@@ -40,16 +40,19 @@ class MainScene extends Phaser.Scene {
         // background sprite
         this.sprBack = this.add.image(SCREEN_CENTERX, SCREEN_CENTERY, 'imgBack');
 
+        // instances
+        this.settings = new Settings(this);
+
         // listener to pause game
         this.input.keyboard.on('keydown-P', function () {
-            console.log('Game is paused');
+            this.settings.txtPause.text = '[P] Resume';
             this.scene.pause(); // pauses current scene
-            this.scene.launch('ScenePause'); // launches another scene
+            this.scene.launch('ScenePause'); // launches another scene by "key"
         }, this);
 
         // listener on resume event
         this.events.on('resume', function () {
-            console.log('Game is resumed');
+            this.settings.show();
         }, this);
     }
     /**
@@ -85,8 +88,7 @@ class PauseScene extends Phaser.Scene {
     create() {
         // listener to resume game
         this.input.keyboard.on('keydown-P', function () {
-            console.log('Game is unpaused');
-            this.scene.resume('SceneMain'); // resume other scene from paused
+            this.scene.resume('SceneMain'); // resume other scene from paused by "key"
             this.scene.stop(); // stop this scene
         }, this);
     }
