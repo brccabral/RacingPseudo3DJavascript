@@ -187,13 +187,33 @@ class Circuit {
         this.graphics.fillRect(0, p2.y, SCREEN_WIDTH, p1.y - p2.y);
 
         // draw road segment on top of grass
-        this.drawPolygon(p1.x - p1.w, p1.y, p1.x + p1.w, p1.y, p2.x + p2.w, p2.y, p2.x - p2.w, p2.y, color.road);
+        this.drawPolygon(
+            p1.x - p1.w, p1.y, // bottom left
+            p1.x + p1.w, p1.y, // bottom right
+            p2.x + p2.w, p2.y, // top right
+            p2.x - p2.w, p2.y, // top left
+            color.road
+        );
 
         // draw rumble strips - kerbs
         var rumble_w1 = p1.w / 5;
         var rumble_w2 = p2.w / 5;
-        this.drawPolygon(p1.x - p1.w - rumble_w1, p1.y, p1.x - p1.w, p1.y, p2.x - p2.w, p2.y, p2.x - p2.w - rumble_w2, p2.y, color.rumble);
-        this.drawPolygon(p1.x + p1.w + rumble_w1, p1.y, p1.x + p1.w, p1.y, p2.x + p2.w, p2.y, p2.x + p2.w + rumble_w2, p2.y, color.rumble);
+        // left kerb
+        this.drawPolygon(
+            p1.x - p1.w - rumble_w1, p1.y, // bottom left
+            p1.x - p1.w, p1.y, // bottom right
+            p2.x - p2.w, p2.y, // top right
+            p2.x - p2.w - rumble_w2, p2.y, // top left
+            color.rumble
+        );
+        // right kerb
+        this.drawPolygon(
+            p1.x + p1.w + rumble_w1, p1.y, // bottom left
+            p1.x + p1.w, p1.y, // bottom right
+            p2.x + p2.w, p2.y, // top right
+            p2.x + p2.w + rumble_w2, p2.y, // top left
+            color.rumble
+        );
 
         // draw lanes
         if (color.lane) {
@@ -211,10 +231,10 @@ class Circuit {
                 lane_x2 += lane_w2;
 
                 this.drawPolygon(
-                    lane_x1 - line_w1, p1.y,
-                    lane_x1 + line_w1, p1.y,
-                    lane_x2 + line_w2, p2.y,
-                    lane_x2 - line_w2, p2.y,
+                    lane_x1 - line_w1, p1.y, // bottom left
+                    lane_x1 + line_w1, p1.y, // bottom right
+                    lane_x2 + line_w2, p2.y, // top right
+                    lane_x2 - line_w2, p2.y, // top left
                     color.lane
                 )
             }
