@@ -27,11 +27,24 @@ class MainScene extends Phaser.Scene {
     constructor() {
         super({ key: 'SceneMain' });
     }
+    /**
+    * Loads all assets.
+    */
+    preload() { }
+    /**
+    * Creates objects, setup scene inputs
+    */
+    create() { }
+    /**
+    * Main Game Loop
+    */
+    update(time, delta) { }
 }
 class PauseScene extends Phaser.Scene {
     constructor() {
         super({ key: 'ScenePause' });
     }
+    create() { }
 }
 
 // game configuration
