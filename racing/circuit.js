@@ -84,6 +84,57 @@ class Circuit {
         point.screen.w = this.roadWidth;
     }
 
+
+    /**
+     * Renders the road (pseudo 3D view)
+     */
+    render3D() {
+        this.graphics.clear();
+
+        // get current and previous segments
+        var currSegment = this.segments[1];
+        var prevSegment = this.segments[0];
+
+        // get the camera
+        var camera = this.scene.camera;
+
+        this.project3D(currSegment.point, camera);
+        this.project3D(prevSegment.point, camera);
+
+        var p1 = prevSegment.point.screen;
+        var p2 = currSegment.point.screen;
+
+        this.drawSegment(p1, p2, currSegment.color);
+
+        // console.log("Previous segment: ", p1);
+        // console.log("Current segment: ", p2);
+    }
+    /***
+     * Projects a point from game position, to camera position, to screen position
+     */
+    project3D(point, camera) {
+
+        // translating world coord to camera coord
+        var transX = point.world.x - camera.x;
+        var transY = point.world.y - camera.y;
+        var transZ = point.world.z - camera.z;
+
+        // scaling factor based on the law of similar triangles
+        // console.log("Depth: ", camera.distToPlane, " TransZ: ", transZ);
+        point.scale = camera.distToPlane / transZ;
+
+        // projecting camera coordinates onto a normalized projection plane
+        var projectedX = point.scale * transX;
+        var projectedY = point.scale * transY;
+        var projectedW = point.scale * this.roadWidth;
+
+        // scaling projected coord to the screen coord
+        point.screen.x = Math.round((1 + projectedX) * SCREEN_CENTERX);
+        point.screen.y = Math.round((1 - projectedY) * SCREEN_CENTERY);
+        point.screen.w = Math.round(projectedW * SCREEN_CENTERX);
+
+    }
+
     drawSegment(p1, p2, color) {
         // x,y is in the center
         this.drawPolygon(p1.x - p1.w, p1.y, p1.x + p1.w, p1.y, p2.x + p2.w, p2.y, p2.x - p2.w, p2.y, color.road);
