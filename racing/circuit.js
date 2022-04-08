@@ -1,3 +1,8 @@
+const COLORS = {
+    Light: { road: '0x888888' },
+    Dark: { road: '0x666666' },
+}
+
 class Circuit {
     constructor(scene) {
         // reference to the scene
@@ -66,9 +71,7 @@ class Circuit {
                 screen: { x: 0, y: 0, w: 0 }, // screen position
                 scale: -1,
             },
-            color: {
-                road: '0x888888'
-            }
+            color: Math.floor(n / 5) % 2 ? COLORS.Dark : COLORS.Light,
         })
     }
 
