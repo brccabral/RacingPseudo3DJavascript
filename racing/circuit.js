@@ -1,6 +1,6 @@
 const COLORS = {
     Light: { road: '0x888888', grass: '0x429352', rumble: '0xb8312e' },
-    Dark: { road: '0x666666', grass: '0x397d46', rumble: '0xDDDDDD' },
+    Dark: { road: '0x666666', grass: '0x397d46', rumble: '0xDDDDDD', lane: '0xFFFFFF' },
 }
 
 class Circuit {
@@ -31,6 +31,9 @@ class Circuit {
 
         // number of segments that forms a rumble strip - kerbs
         this.rumble_segments = 5;
+
+        // number of lanes
+        this.roadLanes = 3;
     }
 
     create() {
@@ -191,6 +194,31 @@ class Circuit {
         var rumble_w2 = p2.w / 5;
         this.drawPolygon(p1.x - p1.w - rumble_w1, p1.y, p1.x - p1.w, p1.y, p2.x - p2.w, p2.y, p2.x - p2.w - rumble_w2, p2.y, color.rumble);
         this.drawPolygon(p1.x + p1.w + rumble_w1, p1.y, p1.x + p1.w, p1.y, p2.x + p2.w, p2.y, p2.x + p2.w + rumble_w2, p2.y, color.rumble);
+
+        // draw lanes
+        if (color.lane) {
+            var line_w1 = (p1.w / 20) / 2;
+            var line_w2 = (p2.w / 20) / 2;
+
+            var lane_w1 = p1.w * 2 / this.roadLanes;
+            var lane_w2 = p2.w * 2 / this.roadLanes;
+
+            var lane_x1 = p1.x - p1.w;
+            var lane_x2 = p2.x - p2.w;
+
+            for (let i = 1; i < this.roadLanes; i++) {
+                lane_x1 += lane_w1;
+                lane_x2 += lane_w2;
+
+                this.drawPolygon(
+                    lane_x1 - line_w1, p1.y,
+                    lane_x1 + line_w1, p1.y,
+                    lane_x2 + line_w2, p2.y,
+                    lane_x2 - line_w2, p2.y,
+                    color.lane
+                )
+            }
+        }
     }
 
     drawPolygon(x1, y1, x2, y2, x3, y3, x4, y4, color) {
