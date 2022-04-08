@@ -26,8 +26,12 @@ class Camera {
         var player = this.scene.player;
         var circuit = this.scene.circuit;
 
+        // player X is normalized [-1, 1]
         this.x = player.x * circuit.roadWidth;
         // place the camera behind the player
         this.z = player.z - this.distToPlayer;
+
+        // don't let camera Z to go negative
+        if (this.z < 0) this.z += circuit.roadLength;
     }
 }

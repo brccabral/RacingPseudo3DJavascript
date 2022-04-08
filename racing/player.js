@@ -34,6 +34,12 @@ class Player {
     }
 
     update(dt) {
+        // references to the scene objects
+        var circuit = this.scene.circuit;
+
         this.z += this.speed * dt; // move forward
+
+        // when the road loops back, player position is greater than road length adn the road is back to 0
+        if (this.z >= circuit.roadLength) this.z -= circuit.roadLength;
     }
 }
