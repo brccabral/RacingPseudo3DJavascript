@@ -1,6 +1,6 @@
 const COLORS = {
-    Light: { road: '0x888888', grass: '0x429352' },
-    Dark: { road: '0x666666', grass: '0x397d46' },
+    Light: { road: '0x888888', grass: '0x429352', rumble: '0xb8312e' },
+    Dark: { road: '0x666666', grass: '0x397d46', rumble: '0xDDDDDD' },
 }
 
 class Circuit {
@@ -28,6 +28,9 @@ class Circuit {
 
         // number of visible segments to be drawn
         this.visible_segments = 200;
+
+        // number of segments that forms a rumble strip - kerbs
+        this.rumble_segments = 5;
     }
 
     create() {
@@ -71,7 +74,7 @@ class Circuit {
                 screen: { x: 0, y: 0, w: 0 }, // screen position
                 scale: -1,
             },
-            color: Math.floor(n / 5) % 2 ? COLORS.Dark : COLORS.Light,
+            color: Math.floor(n / this.rumble_segments) % 2 ? COLORS.Dark : COLORS.Light,
         })
     }
 
@@ -182,6 +185,12 @@ class Circuit {
 
         // draw road segment on top of grass
         this.drawPolygon(p1.x - p1.w, p1.y, p1.x + p1.w, p1.y, p2.x + p2.w, p2.y, p2.x - p2.w, p2.y, color.road);
+
+        // draw rumble strips - kerbs
+        var rumble_w1 = p1.w / 5;
+        var rumble_w2 = p2.w / 5;
+        this.drawPolygon(p1.x - p1.w - rumble_w1, p1.y, p1.x - p1.w, p1.y, p2.x - p2.w, p2.y, p2.x - p2.w - rumble_w2, p2.y, color.rumble);
+        this.drawPolygon(p1.x + p1.w + rumble_w1, p1.y, p1.x + p1.w, p1.y, p2.x + p2.w, p2.y, p2.x + p2.w + rumble_w2, p2.y, color.rumble);
     }
 
     drawPolygon(x1, y1, x2, y2, x3, y3, x4, y4, color) {
