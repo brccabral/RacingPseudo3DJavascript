@@ -38,7 +38,28 @@ class MainScene extends Phaser.Scene {
     /**
     * Main Game Loop
     */
-    update(time, delta) { }
+    update(time, delta) {
+        // state machine
+        switch (state) {
+            case STATE_INIT:
+                console.log('Init game');
+                state = STATE_RESTART;
+                break;
+
+            case STATE_RESTART:
+                console.log('Restart game');
+                state = STATE_PLAY;
+                break;
+
+            case STATE_PLAY:
+                console.log('Playing game');
+                break;
+
+            case STATE_GAMEOVER:
+                console.log('Game over');
+                break;
+        }
+    }
 }
 class PauseScene extends Phaser.Scene {
     constructor() {
