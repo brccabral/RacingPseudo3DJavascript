@@ -36,7 +36,7 @@ class MainScene extends Phaser.Scene {
     */
     preload() {
         this.load.image('imgBack', 'racing/assets/img_back.png');
-        this.load.image('imgPLayer', 'racing/assets/img_player.png');
+        this.load.image('imgPlayer', 'racing/assets/img_player.png');
     }
     /**
     * Creates objects, setup scene inputs

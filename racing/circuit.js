@@ -29,6 +29,9 @@ class Circuit {
 
         // number of lanes
         this.roadLanes = 3;
+
+        // texture to draw sprites on it
+        this.texture = scene.add.renderTexture(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
     }
 
     create() {
@@ -157,11 +160,20 @@ class Circuit {
 
                 this.drawSegment(p1, p2, currSegment.color);
 
+                // move clipping bottom line up
+                clipBottomLine = currBottomLine;
+
                 // console.log(prevIndex, currIndex, p1, p2);
                 // console.log("Previous segment: ", p1);
                 // console.log("Current segment: ", p2);
             }
         }
+
+        // draw all visible objects on the rendering texture
+        this.texture.clear();
+
+        var player = this.scene.player;
+        this.texture.draw(player.sprite, player.screen.x, player.screen.y);
     }
     /***
      * Projects a point from game position, to camera position, to screen position
