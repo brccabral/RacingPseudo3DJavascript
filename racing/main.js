@@ -41,6 +41,7 @@ class MainScene extends Phaser.Scene {
         this.sprBack = this.add.image(SCREEN_CENTERX, SCREEN_CENTERY, 'imgBack');
 
         // instances
+        this.circuit = new Circuit(this);
         this.settings = new Settings(this);
 
         // listener to pause game
@@ -68,6 +69,7 @@ class MainScene extends Phaser.Scene {
 
             case STATE_RESTART:
                 console.log('Restart game');
+                this.circuit.create();
                 state = STATE_PLAY;
                 break;
 
