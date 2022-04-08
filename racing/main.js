@@ -23,6 +23,10 @@ const STATE_GAMEOVER = 4;
 // current state
 var state = STATE_INIT;
 
+// sprites
+// the sprites are stored in Scene
+const PLAYER = 0; // player is sprite 0 in scene
+
 class MainScene extends Phaser.Scene {
     constructor() {
         super({ key: 'SceneMain' });
@@ -32,6 +36,7 @@ class MainScene extends Phaser.Scene {
     */
     preload() {
         this.load.image('imgBack', 'racing/assets/img_back.png');
+        this.load.image('imgPLayer', 'racing/assets/img_player.png');
     }
     /**
     * Creates objects, setup scene inputs
@@ -39,6 +44,10 @@ class MainScene extends Phaser.Scene {
     create() {
         // background sprite
         this.sprBack = this.add.image(SCREEN_CENTERX, SCREEN_CENTERY, 'imgBack');
+
+        this.sprites = [
+            this.add.image(0, 0, 'imgPlayer').setVisible(false)
+        ]
 
         // instances
         this.circuit = new Circuit(this);
@@ -67,13 +76,14 @@ class MainScene extends Phaser.Scene {
             case STATE_INIT:
                 // console.log('Init game');
                 this.camera.init();
-                this.player.restart();
+                this.player.init();
                 state = STATE_RESTART;
                 break;
 
             case STATE_RESTART:
                 // console.log('Restart game');
                 this.circuit.create();
+                this.player.restart();
                 state = STATE_PLAY;
                 break;
 
