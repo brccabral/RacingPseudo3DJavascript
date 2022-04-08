@@ -30,11 +30,16 @@ class MainScene extends Phaser.Scene {
     /**
     * Loads all assets.
     */
-    preload() { }
+    preload() {
+        this.load.image('imgBack', 'racing/assets/img_back.png');
+    }
     /**
     * Creates objects, setup scene inputs
     */
-    create() { }
+    create() {
+        // background sprite
+        this.sprBack = this.add.image(SCREEN_CENTERX, SCREEN_CENTERY, 'imgBack');
+    }
     /**
     * Main Game Loop
     */
