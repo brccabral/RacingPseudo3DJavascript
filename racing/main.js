@@ -42,6 +42,7 @@ class MainScene extends Phaser.Scene {
 
         // instances
         this.circuit = new Circuit(this);
+        this.camera = new Camera(this);
         this.settings = new Settings(this);
 
         // listener to pause game
