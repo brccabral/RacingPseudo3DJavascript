@@ -56,7 +56,7 @@ class Circuit {
     createRoad() {
         // there will be more segments later
         // each segment can be Straight/Curved, Uphill/Downhill/No Slope
-        this.createSection(1000);
+        this.createSection(300);
     }
 
     createSection(nSegments) {
@@ -145,7 +145,10 @@ class Circuit {
             var currIndex = (baseIndex + n) % this.total_segments;
             var currSegment = this.segments[currIndex];
 
-            this.project3D(currSegment.point, camera);
+            // get camera offset-Z to loop back the road
+            var offsetZ = (currIndex < baseIndex) ? this.roadLength : 0;
+
+            this.project3D(currSegment.point, camera, offsetZ);
 
             // draw this segment only if it is above clipping bottom line
             var currBottomLine = currSegment.point.screen.y;
@@ -178,12 +181,12 @@ class Circuit {
     /***
      * Projects a point from game position, to camera position, to screen position
      */
-    project3D(point, camera) {
+    project3D(point, camera, offsetZ) {
 
         // translating world coord to camera coord
         var transX = point.world.x - camera.x;
         var transY = point.world.y - camera.y;
-        var transZ = point.world.z - camera.z;
+        var transZ = point.world.z - camera.z - offsetZ;
 
         // scaling factor based on the law of similar triangles
         // console.log("Depth: ", camera.distToPlane, " TransZ: ", transZ);
