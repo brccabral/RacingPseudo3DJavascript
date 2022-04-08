@@ -45,13 +45,37 @@ class Circuit {
         this.segments.push({
             index: n,
             point:{
-                world: {x: 0, y: 0, z: n*this.segmentLength},
-                screen: {x: 0, y: 0, z: 0},
+                world: {x: 0, y: 0, z: n*this.segmentLength}, // game position
+                screen: {x: 0, y: 0, w: 0}, // screen position
                 scale: -1,
             },
             color: {
                 road: '0x888888'
             }
         })
+    }
+
+    /**
+     * Renders the road (2D view)
+     */
+    render2D(){
+        // get current and previous segments
+        var currSegment = this.segments[1];
+        var prevSegment = this.segments[0];
+
+        this.project2D(currSegment.point);
+        this.project2D(prevSegment.point);
+
+        var p1 = prevSegment.point.screen;
+        var p2 = currSegment.point.screen;
+
+        console.log("Previous segment: ", p1);
+        console.log("Current segment: ", p2);
+    }
+
+    project2D(point){
+        point.screen.x = SCREEN_CENTERX;
+        point.screen.y = SCREEN_HEIGHT - point.world.z;
+        point.screen.w = this.roadWidth;
     }
 }
