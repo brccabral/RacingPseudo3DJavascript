@@ -127,6 +127,9 @@ class Circuit {
     render3D() {
         this.graphics.clear();
 
+        // do not render segments below this limit
+        var clipBottomLine = SCREEN_HEIGHT;
+
         // get the camera
         var camera = this.scene.camera;
 
@@ -141,8 +144,11 @@ class Circuit {
 
             this.project3D(currSegment.point, camera);
 
+            // draw this segment only if it is above clipping bottom line
+            var currBottomLine = currSegment.point.screen.y;
+
             // skip the first segment because we still don't have prevSegment
-            if (n > 0) {
+            if (n > 0 && currBottomLine < clipBottomLine) {
                 var prevIndex = (currIndex > 0) ? currIndex - 1 : this.total_segments - 1;
                 var prevSegment = this.segments[prevIndex];
 
