@@ -39,6 +39,18 @@ class MainScene extends Phaser.Scene {
     create() {
         // background sprite
         this.sprBack = this.add.image(SCREEN_CENTERX, SCREEN_CENTERY, 'imgBack');
+
+        // listener to pause game
+        this.input.keyboard.on('keydown-P', function () {
+            console.log('Game is paused');
+            this.scene.pause(); // pauses current scene
+            this.scene.launch('ScenePause'); // launches another scene
+        }, this);
+
+        // listener on resume event
+        this.events.on('resume', function () {
+            console.log('Game is resumed');
+        }, this);
     }
     /**
     * Main Game Loop
@@ -70,7 +82,15 @@ class PauseScene extends Phaser.Scene {
     constructor() {
         super({ key: 'ScenePause' });
     }
-    create() { }
+    create() {
+        // listener to resume game
+        this.input.keyboard.on('keydown-P', function () {
+            console.log('Game is unpaused');
+            this.scene.resume('SceneMain'); // resume other scene from paused
+            this.scene.stop(); // stop this scene
+        }, this);
+    }
+    update(time, delta) { }
 }
 
 // game configuration
