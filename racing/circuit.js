@@ -186,7 +186,7 @@ class Circuit {
         // translating world coord to camera coord
         var transX = point.world.x - camera.x;
         var transY = point.world.y - camera.y;
-        var transZ = point.world.z - camera.z - offsetZ;
+        var transZ = point.world.z - (camera.z - offsetZ);
 
         // scaling factor based on the law of similar triangles
         // console.log("Depth: ", camera.distToPlane, " TransZ: ", transZ);
