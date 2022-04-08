@@ -23,3 +23,30 @@ const STATE_GAMEOVER = 4;
 // current state
 var state = STATE_INIT;
 
+class MainScene extends Phaser.Scene {
+    constructor() {
+        super({ key: 'SceneMain' });
+    }
+}
+class PauseScene extends Phaser.Scene {
+    constructor() {
+        super({ key: 'ScenePause' });
+    }
+}
+
+// game configuration
+var config = {
+    type: Phaser.AUTO,
+    width: SCREEN_WIDTH,
+    height: SCREEN_HEIGHT,
+
+    scale: {
+        mode: Phaser.Scale.FIT,
+        autoCenter: Phaser.Scale.CENTER_BOTH,
+    },
+
+    scene: [MainScene, PauseScene]
+};
+
+// game instance
+var game = new Phaser.Game(config);
