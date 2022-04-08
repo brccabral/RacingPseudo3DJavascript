@@ -3,6 +3,9 @@ class Circuit {
         // reference to the scene
         this.scene = scene;
 
+        // graphics to draw the road polygons on it
+        this.graphics = scene.add.graphics(0, 0);
+
         // road segments
         this.segments = []
 
@@ -34,7 +37,7 @@ class Circuit {
         }
     }
 
-    createSegment(){
+    createSegment() {
         // each segment can be on the road, outside (grass) or kerbs
         // road - grey dark/light
         // grass - green dark/light
@@ -44,9 +47,9 @@ class Circuit {
         // add new segment
         this.segments.push({
             index: n,
-            point:{
-                world: {x: 0, y: 0, z: n*this.segmentLength}, // game position
-                screen: {x: 0, y: 0, w: 0}, // screen position
+            point: {
+                world: { x: 0, y: 0, z: n * this.segmentLength }, // game position
+                screen: { x: 0, y: 0, w: 0 }, // screen position
                 scale: -1,
             },
             color: {
@@ -58,7 +61,7 @@ class Circuit {
     /**
      * Renders the road (2D view)
      */
-    render2D(){
+    render2D() {
         // get current and previous segments
         var currSegment = this.segments[1];
         var prevSegment = this.segments[0];
@@ -69,13 +72,39 @@ class Circuit {
         var p1 = prevSegment.point.screen;
         var p2 = currSegment.point.screen;
 
-        console.log("Previous segment: ", p1);
-        console.log("Current segment: ", p2);
+        this.drawSegment(p1, p2, currSegment.color);
+
+        // console.log("Previous segment: ", p1);
+        // console.log("Current segment: ", p2);
     }
 
-    project2D(point){
+    project2D(point) {
         point.screen.x = SCREEN_CENTERX;
         point.screen.y = SCREEN_HEIGHT - point.world.z;
         point.screen.w = this.roadWidth;
+    }
+
+    drawSegment(p1, p2, color) {
+        // x,y is in the center
+        this.drawPolygon(p1.x - p1.w, p1.y, p1.x + p1.w, p1.y, p2.x + p2.w, p2.y, p2.x - p2.w, p2.y, color.road);
+    }
+
+    drawPolygon(x1, y1, x2, y2, x3, y3, x4, y4, color) {
+        // console.log('draw');
+        // x1,y1 - bottom left
+        // x2,y2 - bottom right
+        // x3,y3 - top right
+        // x4,y4 - top left
+        this.graphics.fillStyle(color, 1);
+        this.graphics.beginPath();
+
+        this.graphics.moveTo(x1, y1);
+        this.graphics.lineTo(x2, y2);
+        this.graphics.lineTo(x3, y3);
+        this.graphics.lineTo(x4, y4);
+
+        this.graphics.closePath();
+        this.graphics.fill();
+
     }
 }
