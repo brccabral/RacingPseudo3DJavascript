@@ -1,6 +1,6 @@
 const COLORS = {
-    Light: { road: '0x888888' },
-    Dark: { road: '0x666666' },
+    Light: { road: '0x888888', grass: '0x429352' },
+    Dark: { road: '0x666666', grass: '0x397d46' },
 }
 
 class Circuit {
@@ -171,7 +171,16 @@ class Circuit {
     }
 
     drawSegment(p1, p2, color) {
+        // p1 is bottom
+        // p2 is top
+
         // x,y is in the center
+
+        // draw grass filling all space
+        this.graphics.fillStyle(color.grass, 1);
+        this.graphics.fillRect(0, p2.y, SCREEN_WIDTH, p1.y - p2.y);
+
+        // draw road segment on top of grass
         this.drawPolygon(p1.x - p1.w, p1.y, p1.x + p1.w, p1.y, p2.x + p2.w, p2.y, p2.x - p2.w, p2.y, color.road);
     }
 
