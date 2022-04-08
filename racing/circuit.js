@@ -14,6 +14,15 @@ class Circuit {
 
         // road width (half, the center is at x=0)
         this.roadWidth = 1000;
+
+        // total n segments
+        this.total_segments = null;
+
+        // total road length
+        self.roadLength = null;
+
+        // number of visible segments to be drawn
+        this.visible_segments = 200;
     }
 
     create() {
@@ -22,18 +31,23 @@ class Circuit {
 
         // create a road
         this.createRoad();
+
+        this.total_segments = this.segments.length;
+
+        // calculate road length
+        this.roadLength = this.total_segments * this.segmentLength;
     }
 
     createRoad() {
         // there will be more segments later
         // each segment can be Straight/Curved, Uphill/Downhill/No Slope
-        this.createSection(10);
+        this.createSection(1000);
     }
 
     createSection(nSegments) {
         for (let index = 0; index < nSegments; index++) {
             this.createSegment();
-            console.log("Created segment: ", index, " ", this.segments[index]);
+            // console.log("Created segment: ", index, " ", this.segments[index]);
         }
     }
 
@@ -84,30 +98,48 @@ class Circuit {
         point.screen.w = this.roadWidth;
     }
 
+    getSegment(positionZ) {
+        // check if behind the player
+        if (positionZ < 0) positionZ += this.roadLength;
+        var index = Math.floor(positionZ / this.segmentLength) % this.total_segments;
+        return this.segments[index];
+    }
+
 
     /**
-     * Renders the road (pseudo 3D view)
+     * Renders the road (pseudo 3D view), segment by segment
      */
     render3D() {
         this.graphics.clear();
 
-        // get current and previous segments
-        var currSegment = this.segments[1];
-        var prevSegment = this.segments[0];
-
         // get the camera
         var camera = this.scene.camera;
 
-        this.project3D(currSegment.point, camera);
-        this.project3D(prevSegment.point, camera);
+        // get the base segment (segment where the camera is located)
+        var baseSegment = this.getSegment(camera.z);
+        var baseIndex = baseSegment.index;
 
-        var p1 = prevSegment.point.screen;
-        var p2 = currSegment.point.screen;
+        for (let n = 0; n < this.visible_segments; n++) {
+            // get current segment
+            var currIndex = (baseIndex + n) % this.total_segments;
+            var currSegment = this.segments[currIndex];
 
-        this.drawSegment(p1, p2, currSegment.color);
+            this.project3D(currSegment.point, camera);
 
-        // console.log("Previous segment: ", p1);
-        // console.log("Current segment: ", p2);
+            // skip the first segment because we still don't have prevSegment
+            if (n > 0) {
+                var prevIndex = (currIndex > 0) ? currIndex - 1 : this.total_segments - 1;
+                var prevSegment = this.segments[prevIndex];
+
+                var p1 = prevSegment.point.screen;
+                var p2 = currSegment.point.screen;
+
+                this.drawSegment(p1, p2, currSegment.color);
+
+                // console.log("Previous segment: ", p1);
+                // console.log("Current segment: ", p2);
+            }
+        }
     }
     /***
      * Projects a point from game position, to camera position, to screen position

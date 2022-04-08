@@ -64,25 +64,25 @@ class MainScene extends Phaser.Scene {
         // state machine
         switch (state) {
             case STATE_INIT:
-                console.log('Init game');
+                // console.log('Init game');
                 this.camera.init();
                 state = STATE_RESTART;
                 break;
 
             case STATE_RESTART:
-                console.log('Restart game');
+                // console.log('Restart game');
                 this.circuit.create();
                 state = STATE_PLAY;
                 break;
 
             case STATE_PLAY:
-                console.log('Playing game');
+                // console.log('Playing game');
                 this.camera.update();
                 this.circuit.render3D();
                 break;
 
             case STATE_GAMEOVER:
-                console.log('Game over');
+                // console.log('Game over');
                 break;
         }
     }
