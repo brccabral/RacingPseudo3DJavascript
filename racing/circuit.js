@@ -1,8 +1,3 @@
-const COLORS = {
-    Light: { road: '0x888888', grass: '0x429352', rumble: '0xb8312e' },
-    Dark: { road: '0x666666', grass: '0x397d46', rumble: '0xDDDDDD', lane: '0xFFFFFF' },
-}
-
 class Circuit {
     constructor(scene) {
         // reference to the scene
@@ -43,6 +38,12 @@ class Circuit {
         // create a road
         this.createRoad();
 
+        // colorize start and finish segements
+        for (let n = 0; n < this.rumble_segments; n++) {
+            this.segments[n].color.road = '0xFFFFFF'; // start
+            this.segments[this.segments.length - 1 - n].color.road = '0x222222'; // finish
+        }
+
         this.total_segments = this.segments.length;
 
         // calculate road length
@@ -67,6 +68,11 @@ class Circuit {
         // road - grey dark/light
         // grass - green dark/light
         // kerb - red/white
+        const COLORS = {
+            Light: { road: '0x888888', grass: '0x429352', rumble: '0xb8312e' },
+            Dark: { road: '0x666666', grass: '0x397d46', rumble: '0xDDDDDD', lane: '0xFFFFFF' },
+        }
+
         var n = this.segments.length;
 
         // add new segment
@@ -145,6 +151,7 @@ class Circuit {
 
                 this.drawSegment(p1, p2, currSegment.color);
 
+                // console.log(prevIndex, currIndex, p1, p2);
                 // console.log("Previous segment: ", p1);
                 // console.log("Current segment: ", p2);
             }
